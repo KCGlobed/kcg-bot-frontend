@@ -1,0 +1,48 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Scoped Preflight / Reset */
+#kcg-chat-widget-container {
+  font-family: 'Inter', sans-serif;
+  line-height: 1.5;
+  -webkit-text-size-adjust: 100%;
+  -moz-tab-size: 4;
+  tab-size: 4;
+  font-feature-settings: normal;
+  font-variation-settings: normal;
+}
+
+#kcg-chat-widget-container *,
+#kcg-chat-widget-container ::before,
+#kcg-chat-widget-container ::after {
+  box-sizing: border-box;
+  border-width: 0;
+  border-style: solid;
+  border-color: #e5e7eb;
+}
+
+/* Base styles that were previously on body */
+#kcg-chat-widget-container {
+  @apply font-sans antialiased text-slate-800;
+  /* bg-gray-50 might not be wanted on the container itself if it's just a floating button, 
+     but possibly for the chat window. Let's start with basic text setup. */
+}
+
+/* Styles for the chat window itself if it uses these */
+/* Custom fade in animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.3s ease-out forwards;
+}

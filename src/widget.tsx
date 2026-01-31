@@ -1,6 +1,6 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import './index.css'
+import './widget.css'
 import { ChatWidget } from './components/ChatWidget'
 
 const widgetId = 'kcg-chat-widget-container';

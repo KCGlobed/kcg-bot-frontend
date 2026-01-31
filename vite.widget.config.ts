@@ -1,9 +1,20 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { resolve } from 'path'
+import tailwindcss from 'tailwindcss'
+import autoprefixer from 'autoprefixer'
+import tailwindConfig from './tailwind.widget.config'
 
 export default defineConfig({
     plugins: [react()],
+    css: {
+        postcss: {
+            plugins: [
+                tailwindcss(tailwindConfig),
+                autoprefixer,
+            ],
+        },
+    },
     define: {
         'process.env.NODE_ENV': JSON.stringify('production'),
     },
