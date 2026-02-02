@@ -18,6 +18,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({ onClose }) => {
     const [messages, setMessages] = useState<ChatMessage[]>([]);
     const [input, setInput] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const [isWriting, setIsWriting] = useState(false); // Track visual typing state
     const [sessionId, setSessionId] = useState('');
     const inputRef = useRef<HTMLInputElement>(null);
     const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -61,7 +62,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({ onClose }) => {
     }, [isLoading]);
 
     const sendMessage = async (text: string, currentSessionId = sessionId) => {
-        if (!currentSessionId || isLoading) return;
+        if (!currentSessionId || isLoading || isWriting) return;
 
         // If text is empty, it might be initial trigger, don't show user bubble
         if (text.trim()) {
@@ -83,6 +84,9 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({ onClose }) => {
                 content: data.message,
                 options: data.options
             }]);
+
+            // Start visual typing
+            setIsWriting(true);
         } catch (error) {
             console.error("Chat error", error);
             setMessages(prev => [...prev, { role: 'assistant', content: "Sorry, I'm having trouble connecting to the server. Please check your connection." }]);
@@ -92,7 +96,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({ onClose }) => {
     };
 
     const handleOptionClick = (option: string) => {
-        if (!isLoading) {
+        if (!isLoading && !isWriting) {
             sendMessage(option);
         }
     };
@@ -137,6 +141,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({ onClose }) => {
                         options={msg.options}
                         onOptionClick={handleOptionClick}
                         onContentUpdate={scrollToBottom}
+                        onTypingComplete={() => setIsWriting(false)}
                     />
                 ))}
                 {isLoading && (
@@ -154,7 +159,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({ onClose }) => {
             {/* Input Area */}
             <div className="p-4 bg-white border-t border-gray-100 shrink-0 shadow-[0_-5px_15px_-5px_rgba(0,0,0,0.05)]">
                 <form
-                    onSubmit={(e) => { e.preventDefault(); if (!isLoading) sendMessage(input); }}
+                    onSubmit={(e) => { e.preventDefault(); if (!isLoading && !isWriting) sendMessage(input); }}
                     className="flex gap-2 relative"
                 >
                     <input
@@ -162,13 +167,13 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({ onClose }) => {
                         type="text"
                         value={input}
                         onChange={(e) => setInput(e.target.value)}
-                        placeholder={isLoading ? "Please wait..." : "Type your question..."}
+                        placeholder={isLoading || isWriting ? "Please wait..." : "Type your question..."}
                         className="flex-1 px-4 py-3 bg-gray-50 border border-gray-200 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-kcg-blue/20 focus:border-kcg-blue transition-all placeholder:text-gray-400"
 
                     />
                     <button
                         type="submit"
-                        disabled={!input.trim() || isLoading}
+                        disabled={!input.trim() || isLoading || isWriting}
                         className="p-3 bg-kcg-blue text-white rounded-full hover:bg-blue-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all transform hover:scale-105 active:scale-95 shadow-md flex items-center justify-center"
                     >
                         <Send size={18} />

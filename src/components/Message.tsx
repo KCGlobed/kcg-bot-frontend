@@ -11,16 +11,20 @@ interface MessageProps {
     options?: string[];
     onOptionClick?: (option: string) => void;
     onContentUpdate?: () => void;
+    onTypingComplete?: () => void;
 }
 
-export const Message: React.FC<MessageProps> = ({ role, content, options, onOptionClick, onContentUpdate }) => {
+export const Message: React.FC<MessageProps> = ({ role, content, options, onOptionClick, onContentUpdate, onTypingComplete }) => {
     const isBot = role === 'assistant';
     const [displayedContent, setDisplayedContent] = useState(isBot ? '' : content);
 
     const onContentUpdateRef = React.useRef(onContentUpdate);
+    const onTypingCompleteRef = React.useRef(onTypingComplete);
+
     useEffect(() => {
         onContentUpdateRef.current = onContentUpdate;
-    }, [onContentUpdate]);
+        onTypingCompleteRef.current = onTypingComplete;
+    }, [onContentUpdate, onTypingComplete]);
 
     // Typing effect for bot
     useEffect(() => {
@@ -42,6 +46,7 @@ export const Message: React.FC<MessageProps> = ({ role, content, options, onOpti
                 onContentUpdateRef.current?.();
             } else {
                 clearInterval(timer);
+                onTypingCompleteRef.current?.();
             }
         }, speed);
 
