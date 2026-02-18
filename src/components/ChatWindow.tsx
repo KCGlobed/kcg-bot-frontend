@@ -122,9 +122,9 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({ onClose }) => {
                     </div>
                 </div>
                 <div className="flex gap-2">
-                    <button onClick={handleReset} className="p-1.5 hover:bg-white/10 rounded-full transition-colors" title="Start New Chat">
+                    {/* <button onClick={handleReset} className="p-1.5 hover:bg-white/10 rounded-full transition-colors" title="Start New Chat">
                         <RefreshCw size={16} />
-                    </button>
+                    </button> */}
                     <button onClick={onClose} className="p-1.5 hover:bg-white/10 rounded-full transition-colors">
                         <X size={20} />
                     </button>
