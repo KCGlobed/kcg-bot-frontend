@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, X, RefreshCw } from 'lucide-react';
+import { Send, X } from 'lucide-react';
 import axios from 'axios';
 import { Message } from './Message';
 import { v4 as uuidv4 } from 'uuid';
@@ -101,14 +101,14 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({ onClose }) => {
         }
     };
 
-    const handleReset = () => {
-        if (isLoading) return;
-        const newSession = uuidv4();
-        localStorage.setItem('kcg_chat_session', newSession);
-        setSessionId(newSession);
-        setMessages([]);
-        sendMessage("", newSession);
-    };
+    // const handleReset = () => {
+    //     if (isLoading) return;
+    //     const newSession = uuidv4();
+    //     localStorage.setItem('kcg_chat_session', newSession);
+    //     setSessionId(newSession);
+    //     setMessages([]);
+    //     sendMessage("", newSession);
+    // };
 
     return (
         <div className="fixed bottom-24 right-6 w-[380px] h-[600px] bg-white rounded-xl shadow-2xl border border-gray-200 flex flex-col overflow-hidden font-sans z-50 animate-fade-in-up">
